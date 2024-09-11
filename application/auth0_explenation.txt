@@ -1,0 +1,13 @@
+# Auth0 posiada różne udogodnienia, np. integracja przez OAuth z Google
+# Cały proces autoryzacji i uwierzytelnienia przenosisz do 3rd party service
+
+# Auth0:
+# - Tenant
+# - Application
+# - API Management (component)
+
+# - OAuth - to technologia ktora opisuje jakie kroki musza byc podejmowane zeby pracowac/wygenerowac access token
+# - OIDC
+
+# FastAPI -----> Application (API Gateway Barbershop) --uses-> Management API (Api Gateway barbershop API)
+
