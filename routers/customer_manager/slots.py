@@ -1,19 +1,19 @@
 import httpx
 from fastapi import APIRouter
 from fastapi import HTTPException
-from fastapi.params import Security
-from application.utils import VerifyToken
+#from fastapi.params import Security
+#from application.utils import VerifyToken
 
 from routers.customer_manager.schemas import SetSlotAvailable, DeleteSlotRequest
 
 router = APIRouter(prefix="/slots")
 MICROSERVICE_URL = "http://localhost:8001"
 
-auth = VerifyToken()
+#auth = VerifyToken()
 
 
 @router.get("/slots/all/available")
-async def get_slots(auth_result: str = Security(auth.verify)):
+async def get_slots():#auth_result: str = Security(auth.verify)):
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(f"{MICROSERVICE_URL}/customers/slots/all/available/")
@@ -28,7 +28,7 @@ async def get_slots(auth_result: str = Security(auth.verify)):
 
 
 @router.get("/slots/on/{slot_date}/available/")
-async def get_slots_on_specific_date(slot_date: str, auth_result: str = Security(auth.verify)):
+async def get_slots_on_specific_date(slot_date: str):#, auth_result: str = Security(auth.verify)):
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(f"{MICROSERVICE_URL}/customers/slots/{slot_date}/available/")
