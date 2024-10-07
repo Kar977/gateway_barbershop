@@ -1,9 +1,6 @@
-import os
-
 import jwt
 import requests
 from auth.schemas import TokenData
-from dotenv import load_dotenv
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from jose import jwt, JWTError
@@ -11,10 +8,6 @@ from main import oauth
 from settings import Settings
 from starlette.exceptions import HTTPException
 
-load_dotenv()
-
-AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
-API_AUDIENCE = os.getenv("AUTH0_API_AUDIENCE")
 ALGORITHMS = ["RS256"]
 
 router = APIRouter(prefix="/auth0")
@@ -29,7 +22,7 @@ def get_auth0_public_key():
 
     :return: The public keys from the Auth0 JWKS endpoint.
     """
-    jwks_url = f'https://{AUTH0_DOMAIN}/.well-known/jwks.json'
+    jwks_url = f'https://{Settings.AUTH0_DOMAIN}/.well-known/jwks.json'
     jwks = requests.get(jwks_url).json()
     return jwks['keys']
 
@@ -52,7 +45,6 @@ def verify_access_token(token: str):
     try:
         jwks = get_auth0_public_key()
         unverified_header = jwt.get_unverified_header(token)
-        print("unverified_header = ", unverified_header)
         rsa_key = {}
         for key in jwks:
             if key["kid"] == unverified_header["kid"]:
@@ -68,8 +60,8 @@ def verify_access_token(token: str):
                 token,
                 rsa_key,
                 algorithms=ALGORITHMS,
-                audience=API_AUDIENCE,
-                issuer=f"https://{AUTH0_DOMAIN}/"
+                audience=Settings.AUTH0_API_AUDIENCE,
+                issuer=f"https://{Settings.AUTH0_DOMAIN}/"
             )
             return TokenData(sub=payload["sub"], permissions=payload.get("permissions", []))
         else:
@@ -88,7 +80,6 @@ def get_current_user(request: Request):
     """
 
     token = request.session.get('access_token')
-    print(token)
 
     if not token:
         raise HTTPException(status_code=403, detail="Missing token")
@@ -107,7 +98,7 @@ async def login(request: Request) -> RedirectResponse:
     redirect_uri = Settings.AUTH0_CALLBACK_URL
     return await oauth.auth0.authorize_redirect(request,
                                                 redirect_uri,
-                                                audience=API_AUDIENCE)
+                                                audience=Settings.AUTH0_API_AUDIENCE)
 
 
 @router.get("/callback")
@@ -138,7 +129,6 @@ async def logout(request: Request):
 
     request.session.clear()
 
-    return {"message": "logged out successfully"}
 
 # ToDO delete it after implementation of tests
 # End point only for check if security with token works correctly
