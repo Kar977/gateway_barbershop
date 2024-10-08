@@ -1,0 +1,4 @@
+auth.auth0_explenantion.txt
+.env
+__pycache__/
+*.pyc
