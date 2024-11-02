@@ -1,19 +1,16 @@
-from fastapi import APIRouter, Request
+from auth.auth0_client import get_current_user as verify_if_logged
+from fastapi import APIRouter, Security
+from routers.common.connection import send_request_to_service
 from routers.customer_manager.schemas import CreateVisitRequest
-from routers.customer_manager.slots import send_request_to_service
-
 from settings import Settings
 
 router = APIRouter(prefix="/visits")
-MICROSERVICE_URL = "http://localhost:8001"
 
 
 @router.post("/visit/")
-async def create_visit(new_visit: CreateVisitRequest, request: Request):
-    from auth.auth0_client import get_current_user as check_if_logged
-
-    check_if_logged(request)
-
+async def create_visit(
+    new_visit: CreateVisitRequest, _: None = Security(verify_if_logged)
+):
     await send_request_to_service(
         "post",
         endpoint="/customers/visit/",

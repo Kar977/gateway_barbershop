@@ -1,9 +1,9 @@
 import httpx
+from auth.configuration import oauth
 from auth.schemas import TokenData
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import RedirectResponse
 from jose import jwt, JWTError
-from main import oauth
 from settings import Settings
 
 ALGORITHMS = ["RS256"]
@@ -62,8 +62,8 @@ async def verify_access_token(token: str) -> TokenData:
         )  # ToDo change detailed information on general info before release on production
 
 
-async def get_current_user(request: Request) -> TokenData:
-    token = request.session.get("access_token")
+async def get_current_user(request: Request):  # -> TokenData:
+    token = request.headers.get("X-Access-Token")
 
     if not token:
         raise HTTPException(status_code=403, detail="Missing token")
@@ -71,17 +71,17 @@ async def get_current_user(request: Request) -> TokenData:
 
 
 async def check_role(request: Request, roles: list) -> list[str]:
-    token = request.session.get("access_token")
+    token = request.headers.get("X-Access-Token")
 
     if not token:
         raise HTTPException(status_code=403, detail="Missing token")
 
-    user_roles = await verify_access_token(token).roles
+    user_roles = await verify_access_token(token)
 
-    if not any(role in user_roles for role in roles):
+    if not any(role in user_roles.roles for role in roles):
         raise HTTPException(
             status_code=401,
-            detail=f"Access denied. Roles required = {roles}. Your roles = {user_roles}",
+            detail=f"Access denied. Roles required = {roles}. Your roles = {user_roles.roles}",
         )
 
     return user_roles
@@ -100,8 +100,6 @@ async def callback(request: Request):
     token = await oauth.auth0.authorize_access_token(request)
     user_info = token.get("userinfo")
 
-    request.session["access_token"] = token["access_token"]
-
     return {"token": token, "user_info": user_info}
 
 
@@ -111,15 +109,9 @@ async def logout(request: Request):
     return {"detail": "Logged out successfully"}
 
 
-@router.get("/private")
-async def private(request: Request):
-    await get_current_user(request)
-
-    return {"view": "private"}
-
-
-@router.get("/private/roles")
-async def private_roles(request: Request):
+async def verify_business_owner_role(request: Request):
     await check_role(request, ["business-owner"])
 
-    return {"message": "You are able to see it, because you have business-owner role!"}
+
+async def verify_employee_role(request: Request):
+    await check_role(request, ["employee", "business-owner"])
