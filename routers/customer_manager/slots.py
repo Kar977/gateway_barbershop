@@ -1,68 +1,51 @@
-import httpx
-from fastapi import APIRouter
-from fastapi import HTTPException
-from fastapi import Request
-
+from auth.auth0_client import get_current_user as verify_if_logged
+from fastapi import APIRouter, Security
+from routers.common.connection import send_request_to_service
 from routers.customer_manager.schemas import SetSlotAvailable, DeleteSlotRequest
+from settings import Settings
 
 router = APIRouter(prefix="/slots")
-MICROSERVICE_URL = "http://localhost:8001"
 
 
 @router.get("/all/available")
 async def get_slots():
 
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.get(f"{MICROSERVICE_URL}/customers/slots/all/available/")
-            response.raise_for_status()
-            return response.json()
-        except httpx.RequestError as exc:
-            raise HTTPException(status_code=500, detail=str(exc))
-        except httpx.HTTPStatusError as exc:
-            raise HTTPException(status_code=exc.response.status_code, detail=exc.response.text)
+    return await send_request_to_service(
+        "get",
+        endpoint="/customers/slots/all/available/",
+        service_url=Settings.CUSTOMER_MANGER_MICROSERVICE_URL,
+    )
 
 
 @router.get("/on/{slot_date}/available/")
 async def get_slots_on_specific_date(slot_date: str):
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.get(f"{MICROSERVICE_URL}/customers/slots/{slot_date}/available/")
-            response.raise_for_status()
-            return response.json()
-        except httpx.RequestError as exc:
-            raise HTTPException(status_code=500, detail=str(exc))
-        except httpx.HTTPStatusError as exc:
-            raise HTTPException(status_code=exc.response.status_code, detail=exc.response.text)
+
+    return await send_request_to_service(
+        "get",
+        endpoint=f"/customers/slots/{slot_date}/available/",
+        service_url=Settings.CUSTOMER_MANGER_MICROSERVICE_URL,
+    )
 
 
 @router.put("/set/available/")
-async def set_slot_available(slot_request: SetSlotAvailable, request: Request):
-    from auth.auth0_client import get_current_user as check_if_logged
-    check_if_logged(request)
-
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.put(f"{MICROSERVICE_URL}/customers/slot/set/available/", json=slot_request.dict())
-            response.raise_for_status()
-            return response.json()
-        except httpx.RequestError as exc:
-            raise HTTPException(status_code=500, detail=str(exc))
-        except httpx.HTTPStatusError as exc:
-            raise HTTPException(status_code=exc.response.status_code, detail=exc.response.text)
+async def set_slot_available(
+    slot_request: SetSlotAvailable, _: None = Security(verify_if_logged)
+):
+    await send_request_to_service(
+        "put",
+        endpoint="/customers/slot/set/available/",
+        body_params=slot_request,
+        service_url=Settings.CUSTOMER_MANGER_MICROSERVICE_URL,
+    )
 
 
 @router.delete("/slot/")
-async def delete_slot(slot_request: DeleteSlotRequest, request: Request):
-    from auth.auth0_client import get_current_user as check_if_logged
-    check_if_logged(request)
-
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.request("DELETE", f"{MICROSERVICE_URL}/customers/slot/", json=slot_request.dict())
-            response.raise_for_status()
-            return response.json()
-        except httpx.RequestError as exc:
-            raise HTTPException(status_code=500, detail=str(exc))
-        except httpx.HTTPStatusError as exc:
-            raise HTTPException(status_code=exc.response.status_code, detail=exc.response.text)
+async def delete_slot(
+    slot_request: DeleteSlotRequest, _: None = Security(verify_if_logged)
+):
+    await send_request_to_service(
+        "delete",
+        endpoint="/customers/slot/",
+        body_params=slot_request,
+        service_url=Settings.CUSTOMER_MANGER_MICROSERVICE_URL,
+    )
