@@ -3,6 +3,8 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from routers.customer_manager import slots, customers, visits, workday
 from routers.users_manager import organization, users
+from routers.employees_manager import employees
+
 
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key="secret-string")
@@ -18,6 +20,7 @@ def register_routers():
     app.include_router(auth0_client.router)
     app.include_router(organization.router)
     app.include_router(users.router)
+    app.include_router(employees.router)
 
 
 register_routers()
