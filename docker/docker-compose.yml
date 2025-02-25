@@ -1,0 +1,13 @@
+services:
+  api-gateway:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    container_name: api-gateway
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ../gateway:/app
+    ports:
+      - "8000:8000"
