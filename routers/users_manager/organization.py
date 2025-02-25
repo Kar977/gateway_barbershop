@@ -6,6 +6,7 @@ from routers.users_manager.schemas import (
     OrganizationName,
     OrganizationIdentifier,
     ModifyOrganization,
+    RemoveUserFromOrganization,
 )
 from settings import Settings
 
@@ -55,6 +56,19 @@ async def update_organization(
     return await send_request_to_service(
         "put",
         endpoint="/organization",
+        body_params=user_request,
+        service_url=Settings.USER_MANAGER_MICROSERVICE_URL,
+    )
+
+
+@router.delete("/organization/user")
+async def remove_user_from_organization(
+    user_request: RemoveUserFromOrganization,
+    _: None = Security(verify_business_owner_role),
+):
+    return await send_request_to_service(
+        "delete",
+        endpoint="/organization/user",
         body_params=user_request,
         service_url=Settings.USER_MANAGER_MICROSERVICE_URL,
     )

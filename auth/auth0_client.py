@@ -47,11 +47,6 @@ async def verify_access_token(token: str) -> TokenData:
             roles = payload.get(f"{Settings.AUTH0_DOMAIN}/roles", [])
             permissions = payload.get("permissions", [])
 
-            print("token data11111")
-            print(
-                TokenData(sub=payload["sub"], roles=roles, permissions=permissions),
-                flush=True,
-            )
             return TokenData(sub=payload["sub"], roles=roles, permissions=permissions)
         else:
             raise HTTPException(status_code=401, detail="Invalid key.")
@@ -69,8 +64,6 @@ async def verify_access_token(token: str) -> TokenData:
 
 async def get_current_user(request: Request) -> TokenData:
     token = request.headers.get("X-Access-Token")
-
-    print("token=", token, flush=True)
 
     if not token:
         raise HTTPException(status_code=403, detail="Missing token")

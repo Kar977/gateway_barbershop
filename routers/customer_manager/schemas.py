@@ -12,7 +12,7 @@ class DeleteCustomerRequest(BaseModel):
     user_id: int
 
 
-class SetSlotAvailable(BaseModel):
+class SetSlotStatus(BaseModel):
     slot_id: int
 
 

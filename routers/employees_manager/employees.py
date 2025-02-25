@@ -10,7 +10,7 @@ from routers.employees_manager.schemas import (
 )
 from settings import Settings
 
-router = APIRouter(prefix="/employees")
+router = APIRouter(prefix="/employee")
 
 
 async def validate_date(date_str: str):
@@ -22,7 +22,8 @@ async def validate_date(date_str: str):
 
 @router.post("/schedule")
 async def create_schedule(
-    employee_request: CreateScheduleRequest, _: None = Security(verify_employee_role)):
+    employee_request: CreateScheduleRequest, _: None = Security(verify_employee_role)
+):
     return await send_request_to_service(
         "post",
         endpoint="/employee/schedule",
@@ -40,8 +41,10 @@ async def list_schedules(_: None = Security(verify_employee_role)):
     )
 
 
-@router.get("/schedules/start_date/{start}/end_date/{end}")
-async def get_schedules_by_date_range(start: str, end: str, _: None = Security(verify_employee_role)):
+@router.get("/schedules/start-date/{start}/end-date/{end}")
+async def get_schedules_by_date_range(
+    start: str, end: str, _: None = Security(verify_employee_role)
+):
     start_date = await validate_date(start)
     end_date = await validate_date(end)
     return await send_request_to_service(
@@ -60,7 +63,9 @@ async def get_schedules_by_day(day: str, _: None = Security(verify_employee_role
 
 
 @router.get("/schedules/employee/{employee_id}")
-async def get_schedules_by_specific_employee(employee_id: str, _: None = Security(verify_employee_role)):
+async def get_schedules_by_specific_employee(
+    employee_id: str, _: None = Security(verify_employee_role)
+):
     return await send_request_to_service(
         "get",
         endpoint=f"/employee/schedules/employee/{employee_id}",
@@ -80,7 +85,9 @@ async def get_schedule_by_specific_employee_and_specific_day(
 
 
 @router.patch("/schedule")
-async def update_schedule(schedule_request: UpdateScheduleRequest, _: None = Security(verify_employee_role)):
+async def update_schedule(
+    schedule_request: UpdateScheduleRequest, _: None = Security(verify_employee_role)
+):
     return await send_request_to_service(
         "patch",
         endpoint="/employee/schedule",
@@ -90,7 +97,9 @@ async def update_schedule(schedule_request: UpdateScheduleRequest, _: None = Sec
 
 
 @router.delete("/schedule")
-async def delete_schedule(schedule_request: DeleteScheduleRequest, _: None = Security(verify_employee_role)):
+async def delete_schedule(
+    schedule_request: DeleteScheduleRequest, _: None = Security(verify_employee_role)
+):
     return await send_request_to_service(
         "delete",
         endpoint="/employee/schedule",
