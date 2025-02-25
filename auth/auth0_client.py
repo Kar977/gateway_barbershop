@@ -62,7 +62,7 @@ async def verify_access_token(token: str) -> TokenData:
         )  # ToDo change detailed information on general info before release on production
 
 
-async def get_current_user(request: Request):  # -> TokenData:
+async def get_current_user(request: Request) -> TokenData:
     token = request.headers.get("X-Access-Token")
 
     if not token:

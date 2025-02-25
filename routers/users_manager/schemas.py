@@ -69,3 +69,14 @@ class NewMember(BaseModel):
 class ModifyClientType(BaseModel):
     client_id: str
     app_type: str
+
+
+class RemoveUserFromOrganization(BaseModel):
+    user_id: str
+    organization_id: str
+
+
+class AddRolesToUser(BaseModel):
+    user_id: str
+    organization: str
+    roles: list
