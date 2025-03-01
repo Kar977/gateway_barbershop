@@ -6,7 +6,7 @@ services:
     container_name: api-gateway
     restart: always
     env_file:
-      - .env
+      - ../gateway/.env
     volumes:
       - ../gateway:/app
     ports:
