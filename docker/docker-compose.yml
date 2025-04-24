@@ -11,3 +11,18 @@ services:
       - ../gateway:/app
     ports:
       - "8000:8000"
+    networks:
+      - gateway_network
+      - service_customer_network
+      - service_employee_network
+      - service_user_network
+
+networks:
+  gateway_network:
+      driver: bridge
+  service_customer_network:
+      external: true
+  service_employee_network:
+      external: true
+  service_user_network:
+      external: true

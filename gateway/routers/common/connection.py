@@ -7,7 +7,6 @@ ALLOWED_METHODS = ["get", "post", "put", "delete"]
 async def send_request_to_service(
     method_name: str, endpoint: str, body_params=None, service_url=str
 ):
-
     if method_name not in ALLOWED_METHODS:
         raise ValueError(f"Unsupported HTTP method: {method_name}")
 

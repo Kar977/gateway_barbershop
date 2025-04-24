@@ -1,8 +1,8 @@
-from auth.auth0_client import verify_employee_role
+from gateway.gateway.auth.auth0_client import verify_employee_role
 from fastapi import APIRouter, Security
-from routers.common.connection import send_request_to_service
-from routers.customer_manager.schemas import DeleteWorkdayRequest, CreateWorkdayRequest
-from settings import Settings
+from gateway.gateway.routers.common.connection import send_request_to_service
+from gateway.gateway.routers.customer_manager.schemas import DeleteWorkdayRequest, CreateWorkdayRequest
+from gateway.gateway.settings import Settings
 
 router = APIRouter(prefix="/workdays")
 

@@ -1,8 +1,8 @@
-from auth.auth0_client import get_current_user as verify_if_logged
+from gateway.gateway.auth.auth0_client import get_current_user as verify_if_logged
 from fastapi import APIRouter, Security
-from routers.common.connection import send_request_to_service
-from routers.customer_manager.schemas import DeleteSlotRequest, SetSlotStatus
-from settings import Settings
+from gateway.gateway.routers.common.connection import send_request_to_service
+from gateway.gateway.routers.customer_manager.schemas import DeleteSlotRequest, SetSlotStatus
+from gateway.gateway.settings import Settings
 
 router = APIRouter(prefix="/slots")
 
@@ -19,7 +19,6 @@ async def get_slots():
 
 @router.get("/available/{slot_date}")
 async def get_slots_on_specific_date(slot_date: str):
-
     return await send_request_to_service(
         "get",
         endpoint=f"/customers/slots/available/{slot_date}",

@@ -1,10 +1,10 @@
 import httpx
-from auth.configuration import oauth
-from auth.schemas import TokenData
+from gateway.gateway.auth.configuration import oauth
+from gateway.gateway.auth.schemas import TokenData
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import RedirectResponse
 from jose import jwt, JWTError
-from settings import Settings
+from gateway.gateway.settings import Settings
 
 ALGORITHMS = ["RS256"]
 
@@ -58,8 +58,8 @@ async def verify_access_token(token: str) -> TokenData:
         )
     except Exception as e:
         raise HTTPException(
-            status_code=500, detail=f"Unexpected error: {str(e)}"
-        )  # ToDo change detailed information on general info before release on production
+            status_code=500, detail=f"Unexpected error"
+        )
 
 
 async def get_current_user(request: Request) -> TokenData:
