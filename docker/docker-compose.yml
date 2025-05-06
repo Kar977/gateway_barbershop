@@ -16,13 +16,41 @@ services:
       - service_customer_network
       - service_employee_network
       - service_user_network
+      - monitoring_network
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring_network
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - monitoring_network
 
 networks:
   gateway_network:
-      driver: bridge
+    driver: bridge
   service_customer_network:
-      external: true
+    external: true
   service_employee_network:
-      external: true
+    external: true
   service_user_network:
-      external: true
+    external: true
+  monitoring_network:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:

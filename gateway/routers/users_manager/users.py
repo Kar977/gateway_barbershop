@@ -1,7 +1,7 @@
-from gateway.gateway.auth.auth0_client import verify_business_owner_role, verify_employee_role
+from auth.auth0_client import verify_business_owner_role, verify_employee_role
 from fastapi import APIRouter, Security
-from gateway.gateway.routers.common.connection import send_request_to_service
-from gateway.gateway.routers.users_manager.schemas import (
+from routers.common.connection import send_request_to_service
+from routers.users_manager.schemas import (
     CreateUser,
     SetUserPasswordEmail,
     DeleteUserAccount,
@@ -9,7 +9,7 @@ from gateway.gateway.routers.users_manager.schemas import (
     NewMember,
     AddRolesToUser,
 )
-from gateway.gateway.settings import Settings
+from settings import Settings
 
 router = APIRouter(prefix="/employees")
 

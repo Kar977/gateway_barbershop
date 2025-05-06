@@ -12,3 +12,4 @@ httpx
 jwt
 authlib
 python-jose
+prometheus-fastapi-instrumentator
