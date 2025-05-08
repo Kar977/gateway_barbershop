@@ -1,10 +1,10 @@
+import os
+
+print("CURRENT PATH", os.getcwd(), flush=True)
 import pytest
-from httpx import AsyncClient, ASGITransport
 from fastapi import Request
 from main import app
-from auth.auth0_client import verify_employee_role, verify_business_owner_role  # dostosuj import!
-from gateway.gateway.routers.common.connection import send_request_to_service
-
+from auth.auth0_client import verify_employee_role, verify_business_owner_role
 
 
 @pytest.fixture

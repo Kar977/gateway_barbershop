@@ -13,3 +13,6 @@ jwt
 authlib
 python-jose
 prometheus-fastapi-instrumentator
+pytest
+pytest-asyncio
+requests
