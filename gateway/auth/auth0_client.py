@@ -1,10 +1,10 @@
 import httpx
-from gateway.gateway.auth.configuration import oauth
-from gateway.gateway.auth.schemas import TokenData
+from auth.configuration import oauth
+from auth.schemas import TokenData
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import RedirectResponse
 from jose import jwt, JWTError
-from gateway.gateway.settings import Settings
+from settings import Settings
 
 ALGORITHMS = ["RS256"]
 

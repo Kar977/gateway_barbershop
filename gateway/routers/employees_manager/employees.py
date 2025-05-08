@@ -1,14 +1,14 @@
 from datetime import datetime
 
-from gateway.gateway.auth.auth0_client import verify_employee_role
+from auth.auth0_client import verify_employee_role
 from fastapi import APIRouter, HTTPException, Security
-from gateway.gateway.routers.common.connection import send_request_to_service
-from gateway.gateway.routers.employees_manager.schemas import (
+from routers.common.connection import send_request_to_service
+from routers.employees_manager.schemas import (
     CreateScheduleRequest,
     UpdateScheduleRequest,
     DeleteScheduleRequest,
 )
-from gateway.gateway.settings import Settings
+from settings import Settings
 
 router = APIRouter(prefix="/employee")
 

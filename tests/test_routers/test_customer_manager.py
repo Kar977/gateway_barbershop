@@ -1,7 +1,7 @@
 import pytest
 
 from fastapi.testclient import TestClient
-from gateway.gateway.main import app
+from main import app
 from httpx import AsyncClient, ASGITransport
 client = TestClient(app)
 

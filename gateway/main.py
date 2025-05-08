@@ -1,17 +1,18 @@
 from fastapi import FastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 from starlette.middleware.sessions import SessionMiddleware
 
-from gateway.gateway.routers.customer_manager import slots, customers, visits, workday
-from gateway.gateway.routers.users_manager import organization, users
-from gateway.gateway.routers.employees_manager import employees
-
+from routers.customer_manager import slots, customers, visits, workday
+from routers.employees_manager import employees
+from routers.users_manager import organization, users
 
 app = FastAPI()
+Instrumentator().instrument(app).expose(app)
 app.add_middleware(SessionMiddleware, secret_key="secret-string")
 
 
 def register_routers():
-    import gateway.gateway.auth.auth0_client as auth0_client
+    import auth.auth0_client as auth0_client
 
     app.include_router(slots.router)
     app.include_router(customers.router)

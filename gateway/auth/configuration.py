@@ -1,5 +1,5 @@
 from authlib.integrations.starlette_client import OAuth
-from gateway.gateway.settings import Settings
+from settings import Settings
 from starlette.config import Config
 
 config = Config(".env")
