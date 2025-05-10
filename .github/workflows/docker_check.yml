@@ -1,0 +1,52 @@
+name: Docker Compose Check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  docker-compose-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Create external Docker networks
+        run: |
+          docker network create service_customer_network || true
+          docker network create service_employee_network || true
+          docker network create service_user_network || true
+
+      - name: Build and start containers
+        working-directory: docker
+        run: docker-compose up -d --build
+
+      - name: Wait for services to start
+        run: |
+          echo "Waiting for services to become healthy..."
+          sleep 20
+          docker ps -a
+
+      - name: Check if API Gateway is running
+        run: |
+          curl --fail http://localhost:8000 || (echo "API Gateway not responding" && exit 1)
+
+      - name: Tear down containers and networks
+        if: always()
+        working-directory: docker
+        run: |
+          docker-compose down -v
+          docker network rm service_customer_network || true
+          docker network rm service_employee_network || true
+          docker network rm service_user_network || true
