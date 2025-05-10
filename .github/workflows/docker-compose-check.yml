@@ -28,6 +28,10 @@ jobs:
           docker network create service_employee_network || true
           docker network create service_user_network || true
 
+      - name: Write .env file from GitHub Secret
+        run: |
+          echo "${{ secrets.GATEWAY_ENV_FILE }}" > gateway/.env
+
       - name: Build and start containers
         working-directory: docker
         run: docker-compose up -d --build
