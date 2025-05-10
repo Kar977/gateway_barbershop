@@ -44,7 +44,7 @@ jobs:
 
       - name: Check if API Gateway is running
         run: |
-          curl --fail http://localhost:8000 || (echo "API Gateway not responding" && exit 1)
+          curl --fail http://localhost:8000/auth0/login || (echo "API Gateway not responding" && exit 1)
 
       - name: Tear down containers and networks
         if: always()
