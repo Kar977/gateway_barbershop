@@ -1,8 +1,9 @@
 import pytest
-
 from fastapi.testclient import TestClient
-from main import app
 from httpx import AsyncClient, ASGITransport
+
+from main import app
+
 client = TestClient(app)
 
 
@@ -22,13 +23,11 @@ async def test_create_workday(mock_customer_request, override_employee_role):
                 "day_status": "open"
             }
         )
-
     assert response.status_code == 200
     assert response.json() == {
                 "date": "01.01.2025",
                 "day_status": "open"
             }
-
 
 @pytest.mark.asyncio
 async def test_create_workday_without_access(mock_customer_request):

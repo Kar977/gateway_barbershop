@@ -1,10 +1,8 @@
-import os
-
-print("CURRENT PATH", os.getcwd(), flush=True)
 import pytest
 from fastapi import Request
-from gateway.gateway.main import app
+
 from auth.auth0_client import verify_employee_role, verify_business_owner_role
+from main import app
 
 
 @pytest.fixture
@@ -32,7 +30,7 @@ def mock_request(monkeypatch):
         async_mock = AsyncMock(return_value=mocked_response)
 
         monkeypatch.setattr(
-            "gateway.gateway.routers.users_manager.organization.send_request_to_service",
+            "routers.users_manager.organization.send_request_to_service",
             async_mock
         )
     return _mock_request
@@ -43,7 +41,7 @@ def mock_employee_request(monkeypatch):
         async_mock = AsyncMock(return_value=mocked_response)
 
         monkeypatch.setattr(
-            "gateway.gateway.routers.employees_manager.employees.send_request_to_service",
+            "routers.employees_manager.employees.send_request_to_service",
             async_mock
         )
     return _mock_request
@@ -54,7 +52,7 @@ def mock_customer_request(monkeypatch):
         async_mock = AsyncMock(return_value=mocked_response)
 
         monkeypatch.setattr(
-            "gateway.gateway.routers.customer_manager.workday.send_request_to_service",
+            "routers.customer_manager.workday.send_request_to_service",
             async_mock
         )
     return _mock_request
