@@ -3,7 +3,7 @@ import os
 print("CURRENT PATH", os.getcwd(), flush=True)
 import pytest
 from fastapi import Request
-from main import app
+from gateway.gateway.main import app
 from auth.auth0_client import verify_employee_role, verify_business_owner_role
 
 
