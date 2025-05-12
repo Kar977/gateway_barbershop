@@ -40,7 +40,7 @@ jobs:
 
       - name: Tag Docker image
         run: |
-          docker tag docker_api-gateway:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com/barbershop-images:latest
+          docker tag docker-api-gateway:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com/barbershop-images:latest
 
       - name: Push Docker image to Amazon ECR
         run: |
