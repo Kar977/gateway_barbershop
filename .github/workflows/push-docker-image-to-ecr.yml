@@ -33,11 +33,14 @@ jobs:
       - name: Build Docker images
         run: |
           cd docker
-          docker compose build -t barbershop-images .
+          docker compose build
+
+      - name: Debug - list local docker images
+        run: docker images
 
       - name: Tag Docker image
         run: |
-          docker tag barbershop-images:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com/barbershop-images:latest
+          docker tag docker_api-gateway:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com/barbershop-images:latest
 
       - name: Push Docker image to Amazon ECR
         run: |
