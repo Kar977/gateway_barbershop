@@ -32,6 +32,7 @@ jobs:
       
       - name: Build Docker images
         run: |
+          cd docker
           docker compose build
 
       - name: Tag Docker image
