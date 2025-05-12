@@ -26,6 +26,10 @@ jobs:
         run: |
           aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com
 
+      - name: Write .env file from GitHub Secret
+        run: |
+          echo "${{ secrets.GATEWAY_ENV_FILE }}" > gateway/.env
+      
       - name: Build Docker images
         run: |
           docker compose build
