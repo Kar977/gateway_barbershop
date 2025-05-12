@@ -33,7 +33,7 @@ jobs:
       - name: Build Docker images
         run: |
           cd docker
-          docker compose build
+          docker compose build -t barbershop-images .
 
       - name: Tag Docker image
         run: |
