@@ -57,24 +57,60 @@ To run the system locally or deploy to a server:
 - AWS_ACCESS_KEY_ID
 - AWS_ACCOUNT_ID
 - AWS_SECRET_ACCESS_KEY
-- GATEWAY_ENV_FILE which consists of multiple lines of:
-  - POSTGRES_NAME
-  - POSTGRES_USER
-  - POSTGRES_PASSWORD
-  - POSTGRES_HOST
-  - POSTGRES_PORT
-  - AUTH0_DOMAIN
-  - AUTH0_CLIENT_ID
-  - AUTH0_CLIENT_SECRET
-  - AUTH0_DOMAIN
-  - AUTH0_CALLBACK_URL=http://localhost:8000/auth0/callback
-  - AUTH0_API_AUDIENCE=http://localhost/api/barbershop
-  - AUTH0_ALGORITHMS=RS256
-  - CUSTOMER_MANGER_MICROSERVICE_URL=http://customer-service:8001
-  - USER_MANAGER_MICROSERVICE_URL=http://user-service:8002
-  - EMPLOYEE_MANAGER_MICROSERVICE_URL=http://employee-service:8003
-   
-4. 2. Build and tag Docker images for each service:
+- POSTGRES_NAME
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- POSTGRES_HOST
+- POSTGRES_PORT
+- AUTH0_DOMAIN
+- AUTH0_CLIENT_ID
+- AUTH0_CLIENT_SECRET
+- AUTH0_DOMAIN
+- AUTH0_CALLBACK_URL=http://localhost:8000/auth0/callback
+- AUTH0_API_AUDIENCE=http://localhost/api/barbershop
+- AUTH0_ALGORITHMS=RS256
+- CUSTOMER_MANGER_MICROSERVICE_URL=http://customer-service:8001
+- USER_MANAGER_MICROSERVICE_URL=http://user-service:8002
+- EMPLOYEE_MANAGER_MICROSERVICE_URL=http://employee-service:8003
+
+3. Set Secrets for customer_manager microservice:
+- AWS_ACCESS_KEY_ID
+- AWS_ACCOUNT_ID
+- AWS_SECRET_ACCESS_KEY
+- POSTGRES_NAME
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- POSTGRES_HOST
+- POSTGRES_PORT
+
+    
+4. Set Secrets for employee_manager microservice:
+- AWS_ACCESS_KEY_ID
+- AWS_ACCOUNT_ID
+- AWS_SECRET_ACCESS_KEY
+- POSTGRES_NAME
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- POSTGRES_HOST
+- POSTGRES_PORT
+  
+5. Set Secrets for user_manager microservice:
+- POSTGRES_NAME
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- TENANT_DOMAIN
+- DATABASE_ID_CONNECTION
+- MANAGEMENT_API_TOKEN
+- CLIENT_ID
+- ORGANIZATION_IDENTIFIER
+- MAIL_GUN_API_KEY
+  
+6. Set Secrets for email_notification microservice:
+- AWS_ACCESS_KEY_ID
+- AWS_ACCOUNT_ID
+- AWS_SECRET_ACCESS_KEY
+
+5. 2. Build and tag Docker images for each service:
    ```bash
    docker build -t barbershop-service-name ./path-to-service
 
